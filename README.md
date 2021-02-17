@@ -7,4 +7,4 @@
     - IPFS
     - Truffle suite
     - Infura - connect to blockchain without running a node
-    - Heroku# ethereum-exchange
+    - Heroku
