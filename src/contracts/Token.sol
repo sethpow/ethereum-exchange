@@ -7,8 +7,8 @@ contract Token {
     using SafeMath for uint;
 
     // Variables
-    string public name = "XYN Token";
-    string public symbol = "XYN";
+    string public name = "POW Token";
+    string public symbol = "POW";
     uint256 public decimals = 18;
     uint256 public totalSupply ;
     // track balances

@@ -6,8 +6,8 @@ require('chai').use(require('chai-as-promised')).should()
 // Contract;          accounts
 contract('Token', ( [ deployer, receiver, exchange ] ) => {
     let token;
-    const name = 'XYN Token'
-    const symbol = 'XYN'
+    const name = 'POW Token'
+    const symbol = 'POW'
     const decimals = '18'
     const totalSupply = tokens(1000000).toString()
 
