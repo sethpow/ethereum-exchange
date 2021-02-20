@@ -1,0 +1,8 @@
+h1 {
+    animation: change 1s step-end both;
+}
+
+@keyframes change {
+    from { opacity: 0; }
+    to   { color: white }
+}
