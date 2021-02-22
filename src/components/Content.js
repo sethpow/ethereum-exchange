@@ -3,6 +3,9 @@ import { connect } from 'react-redux'
 import { exchangeSelector } from '../store/selectors'
 import { loadAllOrders } from '../store/interactions'
 import Trades from './Trades';
+import OrderBook from './OrderBook';
+import MyTransactions from './MyTransactions';
+import PriceChart from './PriceChart';
 
 class Content extends Component {
     componentWillMount(){
@@ -36,36 +39,10 @@ class Content extends Component {
                         </div>
                     </div>
                 </div>
-                <div className='vertical'>
-                    <div className='card bg-dark text-white'>
-                        <div className='card-header'>
-                            Card title
-                        </div>
-                        <div className='card-body'>
-                            <p className='card-text'>example text</p>
-                            <a className='card-link' href='/#'>Card link</a>
-                        </div>
-                    </div>
-                </div>
+                <OrderBook/>
                 <div className='vertical-split'>
-                    <div className='card bg-dark text-white'>
-                        <div className='card-header'>
-                            Card title
-                        </div>
-                        <div className='card-body'>
-                            <p className='card-text'>example text</p>
-                            <a className='card-link' href='/#'>Card link</a>
-                        </div>
-                    </div>
-                    <div className='card bg-dark text-white'>
-                        <div className='card-header'>
-                            Card title
-                        </div>
-                        <div className='card-body'>
-                            <p className='card-text'>example text</p>
-                            <a className='card-link' href='/#'>Card link</a>
-                        </div>
-                    </div>
+                    <PriceChart/>
+                    <MyTransactions/>
                 </div>
                 <Trades/>
             </div>
