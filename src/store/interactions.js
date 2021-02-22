@@ -6,7 +6,9 @@ import {
     exchangeLoaded,
     cancelledOrdersLoaded,
     filledOrdersLoaded,
-    allOrdersLoaded
+    allOrdersLoaded,
+    orderCancelling,
+    orderCancelled
 } from './actions'
 import Token from '../abis/Token.json'
 import Exchange from '../abis/Exchange.json'
@@ -84,4 +86,30 @@ export const loadAllOrders = async (exchange, dispatch) => {
     const allOrders = orderStream.map((event) => event.returnValues)
     // add filled orders to redux store
     dispatch(allOrdersLoaded(allOrders))
+}
+
+// cancel order on X onClick
+    // redux dispatch, exchange smart contract provided by web3
+export const cancelOrder = (dispatch, exchange, order, account) => {
+    // copy of contract; allows for calling functions
+        // exchange contract, cancelOrder method, send metadata (from account that is connected to blockchain)
+    exchange.methods.cancelOrder(order.id).send({ from: account })
+    // using event ommitter; waiting for event to fire/return "something"
+    .on('transactionHash', (hash) => {      // wait for tx hash to come back from blockchain before triggering redux action that order is cancelling
+        // dispatch redux action
+        // show spinner while cancelling; wait for event to come back from blockchain before updating app to show cancelled order
+        dispatch(orderCancelling())
+    })
+    .on('error', (error) => {
+        console.log(error);
+        window.alert('There was an error...');
+    })
+}
+
+// subscribe to smart contract event    require redux dispatch and exchange contract
+export const subscribeToEvents = async (exchange, dispatch) => {
+    exchange.events.Cancel({}, (error, event) => {
+        dispatch(orderCancelled(event.returnValues))
+        // take that cancelled order and put in redux state
+    })
 }
