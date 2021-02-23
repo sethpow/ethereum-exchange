@@ -8,3 +8,4 @@
     - Truffle suite
     - Infura - connect to blockchain without running a node
     - Heroku
+    - https://kovan.etherscan.io/

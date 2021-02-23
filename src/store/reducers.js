@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 // redux reducers
 
 // handle all web3 actions when blockchain is loaded
+// handle form changing
 function web3(state = {}, action) {
     switch (action.type) {
         // when action comes in, will handle WEB3_LOADED; update state, and give back connection key with actual web3 connection
@@ -92,6 +93,46 @@ function exchange(state = {}, action) {
             return {...state, tokenDepositAmount: action.amount}
         case 'TOKEN_WITHDRAW_AMOUNT_CHANGED':
             return {...state, tokenWithdrawAmount: action.amount}
+        case 'BUY_ORDER_AMOUNT_CHANGED':
+            return {...state, buyOrder: {...state.buyOrder, amount: action.amount}}
+        case 'BUY_ORDER_PRICE_CHANGED':
+            return {...state, buyOrder: {...state.buyOrder, price: action.price}}
+        case 'BUY_ORDER_MAKING':
+            return {...state, buyOrder: {...state.buyOrder, amount: null, price: null, making: true}}
+        // whenever order is made, add to redux
+        case 'ORDER_MADE':
+            // prevent duplicate orders
+            index = state.allOrders.data.findIndex(order => order.id === action.order.id);
+
+            if(index === -1){
+                data = [...state.allOrders.data, action.order]
+            } else {
+                data = state.allOrders.data
+            }
+            // update order state
+            return {
+                ...state,
+                allOrders: {
+                    ...state.allOrders,
+                    data
+                },
+                buyOrder: {
+                    ...state.buyOrder,
+                    making: false
+                },
+                sellOrder: {
+                    ...state.sellOrder,
+                    making: false
+                }
+            }
+
+        case 'SELL_ORDER_AMOUNT_CHANGED':
+            return {...state, sellOrder: {...state.sellOrder, amount: action.amount}}
+        case 'SELL_ORDER_PRICE_CHANGED':
+            return {...state, sellOrder: {...state.sellOrder, price: action.price}}
+        case 'SELL_ORDER_MAKING':
+            return {...state, sellOrder: {...state.sellOrder, amount: null, price: null, making: true}}
+
         default:
             return state;
     }
