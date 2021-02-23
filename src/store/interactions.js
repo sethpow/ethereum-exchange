@@ -8,7 +8,9 @@ import {
     filledOrdersLoaded,
     allOrdersLoaded,
     orderCancelling,
-    orderCancelled
+    orderCancelled,
+    orderFilling,
+    orderFilled
 } from './actions'
 import Token from '../abis/Token.json'
 import Exchange from '../abis/Exchange.json'
@@ -88,6 +90,18 @@ export const loadAllOrders = async (exchange, dispatch) => {
     dispatch(allOrdersLoaded(allOrders))
 }
 
+// subscribe to smart contract event    require redux dispatch and exchange contract
+export const subscribeToEvents = async (exchange, dispatch) => {
+    exchange.events.Cancel({}, (error, event) => {
+        dispatch(orderCancelled(event.returnValues))
+        // take that cancelled order and put in redux state
+    })
+
+    exchange.events.Trade({}, (error, event) => {
+        dispatch(orderFilled(event.returnValues))
+    })
+}
+
 // cancel order on X onClick
     // redux dispatch, exchange smart contract provided by web3
 export const cancelOrder = (dispatch, exchange, order, account) => {
@@ -106,10 +120,13 @@ export const cancelOrder = (dispatch, exchange, order, account) => {
     })
 }
 
-// subscribe to smart contract event    require redux dispatch and exchange contract
-export const subscribeToEvents = async (exchange, dispatch) => {
-    exchange.events.Cancel({}, (error, event) => {
-        dispatch(orderCancelled(event.returnValues))
-        // take that cancelled order and put in redux state
+export const fillOrder = (dispatch, exchange, order, account) => {
+    exchange.methods.fillOrder(order.id).send({ from: account })
+    .on('transactionHash', (hash) => {
+        dispatch(orderFilling())
+    })
+    .on('error', (error) => {
+        console.log(error);
+        window.alert('There was an error...');
     })
 }
